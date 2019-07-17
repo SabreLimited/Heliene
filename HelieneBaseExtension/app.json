@@ -1,0 +1,23 @@
+{
+  "id": "bfb110ae-89e2-4237-9fae-e2a2e169cf58",
+  "name": "HelieneBaseExtension",
+  "publisher": "Sabre Limited",
+  "brief": "",
+  "description": "Heliene Customizations",
+  "version": "0.1.1.32",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "capabilities": [],
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "11.0.0.0",
+  "application": "11.0.0.0",
+  "idRange": {
+    "from": 50000,
+    "to": 59200
+  },
+  "target": "Internal"
+}
