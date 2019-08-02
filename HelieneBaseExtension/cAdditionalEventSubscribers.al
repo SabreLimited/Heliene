@@ -367,7 +367,6 @@ codeunit 59114 AdditionalEventSubscribers
     local procedure SalesHeaderArchiveOnBeforeInsert(Rec: Record "Sales Header Archive"; RunTrigger: Boolean);
     var
         SalesHeader: Record "Sales Header";
-        TestErrorCatching: Codeunit testErrorCatching;
     begin
         if SalesHeader.GET(Rec."Document Type", Rec."No.") then
             if(SalesHeader."Document Type" = SalesHeader."Document Type"::Order) then begin
