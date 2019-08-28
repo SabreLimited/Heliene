@@ -48,6 +48,14 @@ tableextension 59122 WarehouseReceiptHeaderExt extends "Warehouse Receipt Header
         {
             Caption = 'Customs Entry #';
             Description = 'SBR4219';
-        }        
+        }
+        field(59109; "SBR Source No."; Code[20])
+        {
+            CalcFormula = lookup("Warehouse Receipt Line"."Source No." where ("No." = field("No.")));
+            Caption = 'Source No.';
+            Description = 'SBR4219';
+            Editable = false;
+            FieldClass = FlowField;
+        }
     }
 }

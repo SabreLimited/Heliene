@@ -58,6 +58,18 @@ pageextension 59129 WarehouseReceiptsExtension extends "Warehouse Receipts"
                 Description = 'SBR4219';
                 Visible = false;
             }
+            field("SBR Vendor Shipment No."; "Vendor Shipment No.")
+            {
+                ApplicationArea = All;
+                Description = 'SBR4219';
+                Visible = false;
+            }
+            field("SBR Source No."; "SBR Source No.")
+            {
+                ApplicationArea = All;
+                Description = 'SBR4219';
+                Visible = false;
+            }
         }
     }
 }
