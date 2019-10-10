@@ -1,5 +1,8 @@
 pageextension 59121 WarehouseShipmentExtension extends "Warehouse Shipment"
 {
+    // HEL11.00 / 0001 / SGR / 071019
+    //   - Added action "Post Shipment & Receipt"
+
     layout
     {
         addafter(Shipping)
@@ -38,8 +41,31 @@ pageextension 59121 WarehouseShipmentExtension extends "Warehouse Shipment"
         }
     }
 
-    var
-        myInt: Integer;
-
+    actions
+    {
+        addafter("Post and &Print")
+        {
+            action("PostShipmentReceipt")
+            {
+                Ellipsis = true;
+                Caption = 'Post Shipment & Receipt';
+                ApplicationArea = All;
+                Promoted = true;
+                PromotedIsBig = true;
+                Image = PostBatch;
+                PromotedCategory = Process;
+                trigger OnAction();
+                var
+                    WhseShipPostReceiveL: Codeunit "Whse. Ship. - Post & Receive";
+                begin
+                    // HEL11.00 / 0001 / SGR / 071019 BEGIN
+                    WhseShipPostReceiveL.SetWarehouseShipmentVariables("No.");
+                    CurrPage.WhseShptLines.Page.PostShipmentYesNo; //PostShipmentYesNo;
+                    WhseShipPostReceiveL.RUN;
+                    // HEL11.00 / 0001 / SGR / 071019 END
+                end;
+            }
+        }
+    }
 }
 
