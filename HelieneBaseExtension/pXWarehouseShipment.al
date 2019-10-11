@@ -66,6 +66,26 @@ pageextension 59121 WarehouseShipmentExtension extends "Warehouse Shipment"
                 end;
             }
         }
+        addlast("F&unctions")
+        {
+            action(CopyReservEntries)
+            {
+                Caption = 'Copy Serial Nos.';
+                Image = CopySerialNo;
+                Ellipsis = true;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                trigger OnAction();
+                var
+                    WhseShptHdr: Record "Warehouse Shipment Header";
+                begin
+                    WhseShptHdr.Get("No.");
+                    WhseShptHdr.SetRecFilter;
+                    Report.RunModal(Report::"IC Copy Serial Nos WS", true, false, WhseShptHdr);
+                end;
+            }
+        }
     }
 }
 
