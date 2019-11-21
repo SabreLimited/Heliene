@@ -6,9 +6,10 @@ pageextension 59142 SBRXPurchaseOrder extends "Purchase Order"
         {
             action(CopyReservEntries)
             {
+                ApplicationArea = All;
                 Caption = 'Copy Serial Nos.';
-                Image = CopySerialNo;
                 Ellipsis = true;
+                Image = CopySerialNo;
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedIsBig = true;
@@ -18,7 +19,7 @@ pageextension 59142 SBRXPurchaseOrder extends "Purchase Order"
                 begin
                     PurchHdr.Get("Document Type","No.");
                     PurchHdr.SetRecFilter;
-                    Report.RunModal(Report::"IC Copy Serial Nos PO", true, false, PurchHdr);
+                    Report.RunModal(Report::"SBR Copy Serial Nos PO", true, false, PurchHdr);
                 end;
             }
         }

@@ -19,5 +19,6 @@
     "from": 50000,
     "to": 59200
   },
-  "target": "Internal"
+  "target": "Internal",
+  "showMyCode": true
 }

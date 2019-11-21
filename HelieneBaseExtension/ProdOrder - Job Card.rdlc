@@ -4604,6 +4604,116 @@
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="RtngNo_ProdOrderRtngLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>RtngNo_ProdOrderRtngLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>RtngNo_ProdOrderRtngLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="OPNo_ProdOrderRtngLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>OPNo_ProdOrderRtngLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>OPNo_ProdOrderRtngLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Type_ProdOrderRtngLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Type_ProdOrderRtngLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Type_ProdOrderRtngLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="No_ProdOrderRtngLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>No_ProdOrderRtngLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>No_ProdOrderRtngLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="StrtTim_ProdOrderRtngLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>StrtTim_ProdOrderRtngLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>StrtTim_ProdOrderRtngLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="EndTime_ProdOrderRtngLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>EndTime_ProdOrderRtngLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>EndTime_ProdOrderRtngLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PrdOrdNo_ProdOrderRtngLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>PrdOrdNo_ProdOrderRtngLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>PrdOrdNo_ProdOrderRtngLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Position_ProdOrderCompCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Position_ProdOrderCompCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Position_ProdOrderCompCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Position2_ProdOrderCompCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Position2_ProdOrderCompCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Position2_ProdOrderCompCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="LdTimOffset_ProdOrderCompCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>LdTimOffset_ProdOrderCompCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>LdTimOffset_ProdOrderCompCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ExpectedQty_ProdOrderCompCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>ExpectedQty_ProdOrderCompCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ExpectedQty_ProdOrderCompCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ItemNo_ProdOrderCompCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>ItemNo_ProdOrderCompCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ItemNo_ProdOrderCompCaption</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""

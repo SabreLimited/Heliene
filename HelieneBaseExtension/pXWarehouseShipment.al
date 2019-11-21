@@ -70,9 +70,10 @@ pageextension 59121 WarehouseShipmentExtension extends "Warehouse Shipment"
         {
             action(CopyReservEntries)
             {
+                ApplicationArea = All;
                 Caption = 'Copy Serial Nos.';
-                Image = CopySerialNo;
                 Ellipsis = true;
+                Image = CopySerialNo;
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedIsBig = true;
@@ -82,7 +83,7 @@ pageextension 59121 WarehouseShipmentExtension extends "Warehouse Shipment"
                 begin
                     WhseShptHdr.Get("No.");
                     WhseShptHdr.SetRecFilter;
-                    Report.RunModal(Report::"IC Copy Serial Nos WS", true, false, WhseShptHdr);
+                    Report.RunModal(Report::"SBR Copy Serial Nos WS", true, false, WhseShptHdr);
                 end;
             }
         }
