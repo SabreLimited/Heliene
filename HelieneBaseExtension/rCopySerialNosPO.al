@@ -5,71 +5,86 @@ report 50107 "SBR Copy Serial Nos PO"
 
     dataset
     {
-        dataitem("Purchase Header"; "Purchase Header")
+        // dataitem("Purchase Header"; "Purchase Header")
+        // {
+        //     RequestFilterFields = "No.";
+        dataitem("Purchase Line"; "Purchase Line")
         {
-            RequestFilterFields = "No.";
-            dataitem("Purchase Line"; "Purchase Line")
-            {
-                DataItemLink = "Document Type" = FIELD("Document Type"), "Document No." = FIELD("No.");
-                DataItemTableView = SORTING("Document Type", "Document No.", "Line No.") WHERE(Type = CONST(Item));
-
-                trigger OnAfterGetRecord()
-                begin
-                    CompWhseShptHdr.ChangeCompany(CompName);
-                    CompWhseShptHdr.Get(WhseShptHdrNo);
-
-                    CompWhseShptLine.ChangeCompany(CompName);
-                    CompWhseShptLine.SetRange("No.", WhseShptHdrNo);
-                    CompWhseShptLine.SetRange("Item No.", "No.");
-                    CompWhseShptLine.SetRange("Variant Code", "Variant Code");
-                    CompWhseShptLine.SetFilter("Qty. Outstanding", '<>0');
-                    if not CompWhseShptLine.FindFirst then
-                        Error('Item %1 not found in Warehouse Shipment %1', "No.", WhseShptHdrNo);
-
-                    CompSalesLine.ChangeCompany(CompName);
-                    CompSalesLine.SetRange("Document Type", CompWhseShptLine."Source Subtype");
-                    CompSalesLine.SetRange("Document No.", CompWhseShptLine."Source No.");
-                    CompSalesLine.SetRange(Type, CompSalesLine.Type::Item);
-                    CompSalesLine.SetRange("No.", "No.");
-                    CompSalesLine.SetRange("Variant Code", "Variant Code");
-                    CompSalesLine.SetFilter("Outstanding Quantity", '<>0');
-                    if CompSalesLine.FindFirst() then begin
-                        CheckIfReservEntryExists(CompSalesLine);
-
-                        ReservEntry.SetCurrentKey(
-                          "Source ID", "Source Ref. No.", "Source Type", "Source Subtype",
-                          "Source Batch Name", "Source Prod. Order Line", "Reservation Status");
-                        ReservEntry.SetRange("Source ID", "Document No.");
-                        ReservEntry.SetRange("Source Ref. No.", "Line No.");
-                        ReservEntry.SetRange("Source Type", Database::"Purchase Line");
-                        ReservEntry.SetRange("Source Subtype", "Document Type");
-                        ReservEntry.SetRange("Source Batch Name", '');
-                        ReservEntry.SetRange("Source Prod. Order Line", 0);
-                        if ReservEntry.FindSet then
-                            repeat
-                                CreateSerialNo(CompSalesLine, ReservEntry."Serial No.",ReservEntry."Quantity (Base)");
-                            until ReservEntry.Next = 0;
-                    end else
-                        Error('Item %1 not found in Warehouse Shipment %1', "No.", WhseShptHdrNo);
-                end;
-
-                trigger OnPreDataItem()
-                begin
-                    SetFilter("Qty. to Receive", '<>0');
-                end;
-            }
+            // DataItemLink = "Document Type" = FIELD("Document Type"), "Document No." = FIELD("No.");
+            DataItemTableView = sorting("Document Type", "Document No.", "Line No.") where(Type = const(Item));
+            // RequestFilterFields = "No.","Line No.";
 
             trigger OnAfterGetRecord()
             begin
-                if WhseShptHdrNo = '' then
-                    Error('Please enter Warehouse Shipment No.');
+                CompWhseShptHdr.ChangeCompany(CompName);
+                CompWhseShptHdr.Get(WhseShptHdrNo);
+
+                CompWhseShptLine.ChangeCompany(CompName);
+                CompWhseShptLine.SetRange("No.", WhseShptHdrNo);
+                CompWhseShptLine.SetRange("Item No.", "No.");
+                CompWhseShptLine.SetRange("Variant Code", "Variant Code");
+                CompWhseShptLine.SetFilter("Qty. Outstanding", '<>0');
+                if not CompWhseShptLine.FindFirst then
+                    Error('Item %1 not found in Warehouse Shipment %1', "No.", WhseShptHdrNo);
+
+                CompSalesLine.ChangeCompany(CompName);
+                CompSalesLine.SetRange("Document Type", CompWhseShptLine."Source Subtype");
+                CompSalesLine.SetRange("Document No.", CompWhseShptLine."Source No.");
+                CompSalesLine.SetRange(Type, CompSalesLine.Type::Item);
+                CompSalesLine.SetRange("No.", "No.");
+                CompSalesLine.SetRange("Variant Code", "Variant Code");
+                CompSalesLine.SetFilter("Outstanding Quantity", '<>0');
+                if CompSalesLine.FindFirst() then begin
+                    CheckIfReservEntryExists(CompSalesLine);
+
+                    ReservEntry.SetCurrentKey(
+                      "Source ID", "Source Ref. No.", "Source Type", "Source Subtype",
+                      "Source Batch Name", "Source Prod. Order Line", "Reservation Status");
+                    ReservEntry.SetRange("Source ID", "Document No.");
+                    ReservEntry.SetRange("Source Ref. No.", "Line No.");
+                    ReservEntry.SetRange("Source Type", Database::"Purchase Line");
+                    ReservEntry.SetRange("Source Subtype", "Document Type");
+                    ReservEntry.SetRange("Source Batch Name", '');
+                    ReservEntry.SetRange("Source Prod. Order Line", 0);
+                    if ReservEntry.FindSet then
+                        repeat
+                            CreateSerialNo(CompSalesLine, ReservEntry."Serial No.", ReservEntry."Quantity (Base)");
+                        until ReservEntry.Next = 0;
+
+                    TrackingSpecification.SetCurrentKey(
+                        "Source ID", "Source Type", "Source Subtype",
+                        "Source Batch Name", "Source Prod. Order Line", "Source Ref. No.");
+                    TrackingSpecification.SetRange("Source ID", "Document No.");
+                    TrackingSpecification.SetRange("Source Type", Database::"Purchase Line");
+                    TrackingSpecification.SetRange("Source Subtype", "Document Type");
+                    TrackingSpecification.SetRange("Source Batch Name", '');
+                    TrackingSpecification.SetRange("Source Prod. Order Line", 0);
+                    TrackingSpecification.SetRange("Source Ref. No.", "Line No.");
+                    if TrackingSpecification.FindSet() then
+                        repeat
+                            CreateSerialNo(CompSalesLine, TrackingSpecification."Serial No.", TrackingSpecification."Quantity (Base)");
+                        until TrackingSpecification.Next() = 0;
+                end else
+                    Error('Item %1 not found in Warehouse Shipment %1', "No.", WhseShptHdrNo);
             end;
 
-            trigger OnPreDataItem()
-            begin
-                if Count > 1 then
-                    Error('Please enter filter on Purchase Header');
-            end;
+            //     trigger OnPreDataItem()
+            //     begin
+            //         SetFilter("Qty. to Receive", '<>0');
+            //     end;
+            // }
+
+            // trigger OnAfterGetRecord()
+            // begin
+            //     if WhseShptHdrNo = '' then
+            //         Error('Please enter Warehouse Shipment No.');
+            // end;
+
+            // trigger OnPreDataItem()
+            // begin
+            //     if Count > 1 then
+            //         Error('Please enter filter on Purchase Header');
+            // end;
         }
     }
 
@@ -135,7 +150,7 @@ report 50107 "SBR Copy Serial Nos PO"
 
     trigger OnPostReport()
     begin
-        Message('Item Tracking Lines has been copied');
+        Message('Item Tracking Lines have been copied');
     end;
 
     var
@@ -144,10 +159,11 @@ report 50107 "SBR Copy Serial Nos PO"
         CompWhseShptHdr: Record "Warehouse Shipment Header";
         CompWhseShptLine: Record "Warehouse Shipment Line";
         CompReservEntry: Record "Reservation Entry";
+        TrackingSpecification: Record "Tracking Specification";
         CompName: Text[30];
         WhseShptHdrNo: Code[20];
 
-    procedure CreateSerialNo(SalesLine: Record "Sales Line"; ForSerialNo: Code[20];QtyBase:Decimal)
+    procedure CreateSerialNo(SalesLine: Record "Sales Line"; ForSerialNo: Code[20]; QtyBase: Decimal)
     var
         ForLotNo: Code[20];
         NextEntryNo: Integer;
