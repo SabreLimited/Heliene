@@ -25,7 +25,7 @@ tableextension 59101 WarehouseShipmentHeadExt extends "Warehouse Shipment Header
             Caption = 'Quoted Price';
             DataClassification = ToBeClassified;
         }
-        field(59104; "SBR Customer Name"; Code[30])
+        field(59104; "SBR Customer Name"; Code[50])
         {
             Caption = 'Customer Name';
         }

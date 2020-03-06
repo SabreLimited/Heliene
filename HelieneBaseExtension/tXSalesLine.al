@@ -78,7 +78,8 @@ tableextension 59100 SalesLineExt extends "Sales Line"
             Caption = 'Production Order Line Number';
             Editable = false;
         }
-        field(59120;"SBR_Prod. Order No."; Code[20]){
+        field(59120;"SBR_Prod. Order No."; Code[20])
+        {
             Caption = 'Production Order No.';
         }
         // Add changes to table fields here
