@@ -1,19 +1,11 @@
 codeunit 59114 AdditionalEventSubscribers
 {
-    trigger OnRun()
-    begin
-
-    end;
-
-    var
-        myInt: Integer;
-
     procedure canTriggerSales(var Rec: Record "Sales Line"): Boolean;
     var
         SalesHeader: Record "Sales Header";
     begin
         SalesHeader.SetRange("No.", Rec."Document No.");
-        IF(skipFunc = true) OR((SalesHeader.FindFirst()) AND(SalesHeader.Status = SalesHeader.Status::Released)) then
+        IF (skipFunc = true) OR ((SalesHeader.FindFirst()) AND (SalesHeader.Status = SalesHeader.Status::Released)) then
             exit(false);
         exit(true)
     end;
@@ -24,7 +16,7 @@ codeunit 59114 AdditionalEventSubscribers
         PurchHeader: Record "Purchase Header";
     begin
         PurchHeader.SETRANGE("No.", Rec."Document No.");
-        IF(skipFunc = true) OR((PurchHeader.Findfirst()) AND((PurchHeader.Status = PurchHeader.Status::Released) OR(PurchHeader.Status = PurchHeader.Status::"Pending Approval"))) then
+        IF (skipFunc = true) OR ((PurchHeader.Findfirst()) AND ((PurchHeader.Status = PurchHeader.Status::Released) OR (PurchHeader.Status = PurchHeader.Status::"Pending Approval"))) then
             exit(false);
         exit(true);
     end;
@@ -35,22 +27,22 @@ codeunit 59114 AdditionalEventSubscribers
         Item: Record "Item";
         SalesHeader: Record "Sales Header";
     begin
-        if(canTriggerSales(Rec) <> true) OR(SalesLineExists(Rec) <> true) then
+        if (canTriggerSales(Rec) <> true) OR (SalesLineExists(Rec) <> true) then
             exit;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
             Item.SETRANGE("No.", Rec."No.");
             IF Item.FINDFIRST then begin
-                if(Rec.Watts = 0) AND(Item.Watts <> 0) then
+                if (Rec.Watts = 0) AND (Item.Watts <> 0) then
                     Rec."Watts" := Item."Watts";
-                if(rec.PricePerWatt = 0) AND(Item.PricePerWatt <> 0) then
+                if (rec.PricePerWatt = 0) AND (Item.PricePerWatt <> 0) then
                     Rec."PricePerWatt" := Item."PricePerWatt";
-                if(rec.CostPerWatt = 0) AND(Item.CostPerWatt <> 0) then
+                if (rec.CostPerWatt = 0) AND (Item.CostPerWatt <> 0) then
                     Rec."CostPerWatt" := Item."CostPerWatt";
-                IF(Rec.PricePerWatt <> 0) AND(Rec.Watts <> 0) then
+                IF (Rec.PricePerWatt <> 0) AND (Rec.Watts <> 0) then
                     Rec.VALIDATE("Unit Price", Item."Watts" * Item."PricePerWatt");
                 Rec.Modify;
             end;
-            IF(Rec."Document No." <> '') THEN BEGIN
+            IF (Rec."Document No." <> '') THEN BEGIN
                 SalesHeader.SetRange("No.", Rec."Document No.");
                 SalesHeader.SetRange("Document Type", Rec."Document Type");
                 IF SalesHeader.FindFirst() THEN
@@ -68,15 +60,14 @@ codeunit 59114 AdditionalEventSubscribers
         Item: Record "Item";
         SalesHeader: Record "Sales Header";
     begin
-        if(canTriggerSales(Rec) <> true) OR(SalesLineExists(Rec) <> true) then
+        if (canTriggerSales(Rec) <> true) OR (SalesLineExists(Rec) <> true) then
             exit;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
             Item.SETRANGE("No.", Rec."No.");
             IF Item.FINDFIRST then begin
                 Rec.VALIDATE("Unit Price", Rec."Watts" * Rec."PricePerWatt");
                 Rec.Modify;
             end;
-
         END;
     end;
 
@@ -86,23 +77,23 @@ codeunit 59114 AdditionalEventSubscribers
         Item: Record "Item";
         SalesHeader: Record "Sales Header";
     begin
-        if(canTriggerSales(Rec) <> true) then
+        if (canTriggerSales(Rec) <> true) then
             exit;
         SalesHeader.RESET;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
             Item.SETRANGE("No.", Rec."No.");
             IF Item.FINDFIRST then begin
-                if(Rec.Watts = 0) AND(Item.Watts <> 0) then
+                if (Rec.Watts = 0) AND (Item.Watts <> 0) then
                     Rec."Watts" := Item."Watts";
-                if(rec.PricePerWatt = 0) AND(Item.PricePerWatt <> 0) then
+                if (rec.PricePerWatt = 0) AND (Item.PricePerWatt <> 0) then
                     Rec."PricePerWatt" := Item."PricePerWatt";
-                if(rec.CostPerWatt = 0) AND(Item.CostPerWatt <> 0) then
+                if (rec.CostPerWatt = 0) AND (Item.CostPerWatt <> 0) then
                     Rec."CostPerWatt" := Item."CostPerWatt";
-                IF(Rec.PricePerWatt <> 0) AND(Rec.Watts <> 0) then
+                IF (Rec.PricePerWatt <> 0) AND (Rec.Watts <> 0) then
                     Rec.VALIDATE("Unit Price", Rec."Watts" * Rec."PricePerWatt");
                 Rec.Modify;
             end;
-            IF(Rec."Document No." <> '') THEN BEGIN
+            IF (Rec."Document No." <> '') THEN BEGIN
                 SalesHeader.SetRange("No.", Rec."Document No.");
                 SalesHeader.SetRange("Document Type", Rec."Document Type");
                 IF SalesHeader.FindFirst() THEN
@@ -119,35 +110,33 @@ codeunit 59114 AdditionalEventSubscribers
     var
         Item: Record "Item";
     begin
-        if(canTriggerPurchase(Rec) <> true) OR(PurchLineExists(Rec) <> true) then
+        if (canTriggerPurchase(Rec) <> true) OR (PurchLineExists(Rec) <> true) then
             exit;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
             Item.SETRANGE("No.", Rec."No.");
             IF Item.FINDFIRST then begin
-                if(Rec.Watts = 0) AND(Item.Watts <> 0) then
+                if (Rec.Watts = 0) AND (Item.Watts <> 0) then
                     Rec."Watts" := Item."Watts";
-                if(rec.CostPerWatt = 0) AND(Item.CostPerWatt <> 0) then
+                if (rec.CostPerWatt = 0) AND (Item.CostPerWatt <> 0) then
                     Rec."CostPerWatt" := Item."CostPerWatt";
-                if(rec.PricePerWatt = 0) AND(Item.PricePerWatt <> 0) then
+                if (rec.PricePerWatt = 0) AND (Item.PricePerWatt <> 0) then
                     Rec."PricePerWatt" := Item."PricePerWatt";
-                IF(Rec.CostPerWatt <> 0) AND(Rec.Watts <> 0) then
+                IF (Rec.CostPerWatt <> 0) AND (Rec.Watts <> 0) then
                     Rec.VALIDATE("Direct Unit Cost", Rec."Watts" * Rec."CostPerWatt");
                 Rec.Modify;
             end;
-
         END;
     end;
 
     [EventSubscriber(ObjectType::Table, 39, 'OnAfterValidateEvent', 'CostPerWatt', true, true)] //OnAfterValidate for PurchaseLine's CostPerWatt SBR-Jo
     local procedure PurchaseLineOnAfterValidateCostPerWatt(var Rec: Record "Purchase Line"; var xRec: Record "Purchase Line"; CurrFieldNo: Integer);
     begin
-        if(canTriggerPurchase(Rec) <> true) OR(PurchLineExists(Rec) <> true) then
+        if (canTriggerPurchase(Rec) <> true) OR (PurchLineExists(Rec) <> true) then
             exit;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
-            IF(Rec.CostPerWatt <> 0) AND(Rec.Watts <> 0) then
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
+            IF (Rec.CostPerWatt <> 0) AND (Rec.Watts <> 0) then
                 Rec.VALIDATE("Direct Unit Cost", Rec."Watts" * Rec."CostPerWatt");
             Rec.Modify;
-
         END;
     end;
 
@@ -156,18 +145,18 @@ codeunit 59114 AdditionalEventSubscribers
     var
         Item: Record "Item";
     begin
-        if(canTriggerPurchase(Rec) <> true) then
+        if (canTriggerPurchase(Rec) <> true) then
             exit;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
             Item.SETRANGE("No.", Rec."No.");
             IF Item.FINDFIRST then begin
-                if(Rec.Watts = 0) AND(Item.Watts <> 0) then
+                if (Rec.Watts = 0) AND (Item.Watts <> 0) then
                     Rec."Watts" := Item."Watts";
-                if(rec.CostPerWatt = 0) AND(Item.CostPerWatt <> 0) then
+                if (rec.CostPerWatt = 0) AND (Item.CostPerWatt <> 0) then
                     Rec."CostPerWatt" := Item."CostPerWatt";
-                if(rec.PricePerWatt = 0) AND(Item.PricePerWatt <> 0) then
+                if (rec.PricePerWatt = 0) AND (Item.PricePerWatt <> 0) then
                     Rec."PricePerWatt" := Item."PricePerWatt";
-                IF(Rec.CostPerWatt <> 0) AND(Rec.Watts <> 0) then
+                IF (Rec.CostPerWatt <> 0) AND (Rec.Watts <> 0) then
                     Rec.VALIDATE("Direct Unit Cost", Rec."Watts" * Rec."CostPerWatt");
                 Rec.Modify;
             end;
@@ -179,20 +168,19 @@ codeunit 59114 AdditionalEventSubscribers
     var
         Item: Record "Item";
     begin
-        if(canTriggerPurchase(Rec) <> true) OR(PurchLineExists(Rec) <> true) then
+        if (canTriggerPurchase(Rec) <> true) OR (PurchLineExists(Rec) <> true) then
             exit;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
             Item.SETRANGE("No.", Rec."No.");
             IF Item.FINDFIRST then begin
-                if(rec.CostPerWatt = 0) AND(Item.CostPerWatt <> 0) then
+                if (rec.CostPerWatt = 0) AND (Item.CostPerWatt <> 0) then
                     Rec."CostPerWatt" := Item."CostPerWatt";
-                if(rec.PricePerWatt = 0) AND(Item.PricePerWatt <> 0) then
+                if (rec.PricePerWatt = 0) AND (Item.PricePerWatt <> 0) then
                     Rec."PricePerWatt" := Item."PricePerWatt";
-                IF(Rec.CostPerWatt <> 0) AND(Rec.Watts <> 0) then
+                IF (Rec.CostPerWatt <> 0) AND (Rec.Watts <> 0) then
                     Rec.VALIDATE("Direct Unit Cost", Rec."Watts" * Rec."CostPerWatt");
                 Rec.Modify;
             end;
-
         END;
     end;
 
@@ -224,9 +212,9 @@ codeunit 59114 AdditionalEventSubscribers
     var
         Item: Record "Item";
     begin
-        if(canTriggerSales(Rec) <> true) OR(SalesLineExists(Rec) <> true) then
+        if (canTriggerSales(Rec) <> true) OR (SalesLineExists(Rec) <> true) then
             exit;
-        IF(Rec.Type = Rec.Type::Item) AND(Rec."No." <> '') AND(Rec."Line No." <> 0) THEN begin
+        IF (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') AND (Rec."Line No." <> 0) THEN begin
             Rec.VALIDATE("SBR Total Watts", Rec.Watts * Rec.Quantity);
             Rec.Modify;
         END;
@@ -234,28 +222,24 @@ codeunit 59114 AdditionalEventSubscribers
 
     [EventSubscriber(ObjectType::Codeunit, 80, 'OnBeforePostSalesDoc', '', true, true)]
     local procedure prePost(var SalesHeader: Record "Sales Header");
-
     begin
         skipFunc := TRUE;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, 80, 'OnAfterPostSalesDoc', '', true, true)]
     local procedure postPost(var SalesHeader: Record "Sales Header");
-
     begin
         skipFunc := false;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, 90, 'OnBeforePostPurchaseDoc', '', true, true)]
     local procedure prePostPurch(var PurchaseHeader: Record "Purchase Header");
-
     begin
         skipFunc := TRUE;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, 90, 'OnAfterPostPurchaseDoc', '', true, true)]
     local procedure postPostPurch(var PurchaseHeader: Record "Purchase Header");
-
     begin
         skipFunc := false;
     end;
@@ -272,6 +256,7 @@ codeunit 59114 AdditionalEventSubscribers
     begin
         skipFunc := false;
     end;
+
     //M3913 Solution Sbr-Jo
     [EventSubscriber(ObjectType::Page, 9307, 'OnBeforeActionEvent', 'SendApprovalRequest', true, true)]
     local procedure preSendPurchaseApprovalList(var Rec: Record "Purchase Header");
@@ -335,11 +320,11 @@ codeunit 59114 AdditionalEventSubscribers
 
     local procedure SalesHeaderVerifyApproval(Rec: Record "Sales Header");
     begin
-        if(Rec."SBR Approval Boolean A" <> true) then
+        if (Rec."SBR Approval Boolean A" <> true) then
             error('Approval Boolean A is not true');
-        if(Rec."SBR Approval Boolean B" <> true) then
+        if (Rec."SBR Approval Boolean B" <> true) then
             error('Approval Boolean B is not true');
-        if(Rec."SBR Approval Boolean C" <> true) then
+        if (Rec."SBR Approval Boolean C" <> true) then
             error('Approval Boolean C is not true');
     end;
 
@@ -369,14 +354,13 @@ codeunit 59114 AdditionalEventSubscribers
         SalesHeader: Record "Sales Header";
     begin
         if SalesHeader.GET(Rec."Document Type", Rec."No.") then
-            if(SalesHeader."Document Type" = SalesHeader."Document Type"::Order) then begin
+            if (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) then begin
                 SalesHeaderRequiredToArchive(SalesHeader);
                 //SalesHeader.TestField("SBR Date Req to Archive");
                 //SalesHeader.Testfield("SBR Bool Req to Archive");
                 //if NOT (SalesHeaderRequiredToArchive(SalesHeader)) then
                 //    Error('Date or Bool fields Required to archive have not been set!');
             end;
-
     end;
 
     [TryFunction]
@@ -438,7 +422,7 @@ codeunit 59114 AdditionalEventSubscribers
         SalesLine: Record "Sales Line";
         ProdHeader: Record "Production Order";
     begin
-        if(ProdOrderLineExists(Rec) <> true) then
+        if (ProdOrderLineExists(Rec) <> true) then
             exit;
         //Will need to Get first Prod Order Line for order if exists and set several fields
         ProdHeader.SetRange("No.", Rec."Prod. Order No.");
@@ -484,7 +468,6 @@ codeunit 59114 AdditionalEventSubscribers
             IF SalesHeader.GET(SalesHeader."Document Type"::Order, rec."Source No.") then
                 WarehouseShipmentHeader."SBR Customer Name" := SalesHeader."Sell-to Customer Name";
             WarehouseShipmentHeader.MODIFY;
-
         end;
         IF WhseShipmentLine.GET(rec."No.", rec."Line No.") then begin
             IF SalesLine.GET(SalesLine."Document Type"::Order, rec."Source No.", rec."Source Line No.") then begin
@@ -493,7 +476,6 @@ codeunit 59114 AdditionalEventSubscribers
             end;
             rec.Modify;
         end;
-
     end;
 
     [EventSubscriber(ObjectType::Table, 7321, 'OnAfterInsertEvent', '', true, true)]
@@ -517,7 +499,6 @@ codeunit 59114 AdditionalEventSubscribers
                 IF WhseShipmentLine.GET(rec."No.", rec."Line No.") then begin
                     rec.Modify;
                 end;
-
             end;
             WarehouseShipmentHeader.MODIFY;
             IF WhseShipmentLine.GET(rec."No.", rec."Line No.") then begin
@@ -529,7 +510,6 @@ codeunit 59114 AdditionalEventSubscribers
                 rec.Modify;
             end;
         end;
-
     end;
 
     [EventSubscriber(ObjectType::Table, 5405, 'OnAfterInsertEvent', '', true, true)]
@@ -586,13 +566,11 @@ codeunit 59114 AdditionalEventSubscribers
             rec.Modify();
         end;
         UpdateDeliverOnTimeOrDelayed(rec);
-
     end;
 
     [EventSubscriber(ObjectType::Table, 7320, 'OnBeforeDeleteEvent', '', true, true)]//Sbr-Jo M3918
     local procedure onBeforeDeleteWhseShipment(var rec: Record "Warehouse Shipment Header");
     var
-
         PstedWhseShipment: Record "Posted Whse. Shipment Header";
     begin
         PstedWhseShipment.SetRange("Whse. Shipment No.", rec."No.");
@@ -633,7 +611,6 @@ codeunit 59114 AdditionalEventSubscribers
             PstedWhseShipment."SBR Sales Header" := rec."SBR Sales Header";
             PstedWhseShipment.Modify();
         END;
-
     END;
 
     [EventSubscriber(ObjectType::Table, 7322, 'OnAfterValidateEvent', 'Posting Date', true, true)]
@@ -694,9 +671,7 @@ codeunit 59114 AdditionalEventSubscribers
                         rec."SBR Total Watts" += SalesLine."SBR Total Watts";
                     until SalesLine.Next = 0;
                 END;
-
             end;
-
     end;
 
     [EventSubscriber(ObjectType::Codeunit, 90, 'OnBeforePurchRcptHeaderInsert', '', true, true)]
@@ -707,7 +682,7 @@ codeunit 59114 AdditionalEventSubscribers
     end;
 
     [EventSubscriber(ObjectType::Codeunit, 90, 'OnBeforePurchInvHeaderInsert', '', true, true)]
-    local procedure onBeforeInsertPostedPurchaseInvoiceHeader(VAR PurchInvHeader: Record "Purch. Rcpt. Header"; VAR PurchHeader: Record "Purchase Header")
+    local procedure onBeforeInsertPostedPurchaseInvoiceHeader(VAR PurchInvHeader: Record "Purch. Inv. Header"; VAR PurchHeader: Record "Purchase Header")
     begin
         //PurchInvHeader."SBR Sales Order No." := PurchHeader."SBR Sales Order No.";
         //PurchInvHeader."SBR Watts" := PurchHeader."SBR Watts";
@@ -720,7 +695,6 @@ codeunit 59114 AdditionalEventSubscribers
         PurchHdr: Record "Purchase Header";
         WhseRcptHdr: Record "Warehouse Receipt Header";
     begin
-
         WhseRcptHdr.Get(WarehouseReceiptLine."No.");
         if PurchHdr.Get(PurchaseLine."Document Type", PurchaseLine."Document No.") then begin
             WhseRcptHdr."SBR Shipment Method Code" := PurchHdr."Shipment Method Code";
@@ -746,6 +720,43 @@ codeunit 59114 AdditionalEventSubscribers
     end;
     // SBR3917 >
 
+    // HEL11.00 / 0005558 / SGR / 2020-04-28 BEGIN
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", 'OnInitSourceDocumentHeaderOnBeforeSalesHeaderModify', '', false, false)]
+    local procedure WhsePostShipmentOnInitSourceDocumentHeaderOnBeforeSalesHeaderModify(var SalesHeader: Record "Sales Header"; var WarehouseShipmentHeader: Record "Warehouse Shipment Header"; ModifyHeader: Boolean)
+    begin
+        WarehouseShipmentHeader.CalcFields("SBR Module Count", "SBR Total Watts Per Truck");
+
+        with SalesHeader do
+        begin
+            "SBRHEL Truck No." := WarehouseShipmentHeader."Truck No.";
+            "SBRHEL Ship-To Code" := WarehouseShipmentHeader."SBR Ship-To Code";
+            "SBRHEL Sales Header" := WarehouseShipmentHeader."SBR Sales Header";
+            "SBRHEL Quoted Price" := WarehouseShipmentHeader."SBR Quoted Price";
+            "SBRHEL Customer Name" := WarehouseShipmentHeader."SBR Customer Name";
+            "SBRHEL Module Count" := WarehouseShipmentHeader."SBR Module Count";
+            "SBRHEL Freight Invoices" := WarehouseShipmentHeader."SBR Freight Invoices";
+            "SBRHEL Freight Invoice Costs" := WarehouseShipmentHeader."SBR Freight Invoice Costs";
+            "SBRHEL Customs Invoice" := WarehouseShipmentHeader."SBR Customs Invoice";
+            "SBRHEL Customs Invoice Costs" := WarehouseShipmentHeader."SBR Customs Invoice Costs";
+            "SBRHEL Customs Entry No." := WarehouseShipmentHeader."SBR Customs Entry No.";
+            "SBRHEL Carrier Rate" := WarehouseShipmentHeader."SBR Carrier Rate";
+            "SBRHEL Total Watts Per Truck" := WarehouseShipmentHeader."SBR Total Watts Per Truck";
+
+            SBRCustManagementG.SetDeliveronTimeorDelayedOnSalesHeader(SalesHeader);                        
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Shipment Header - Edit", 'OnBeforeSalesShptHeaderModify', '', false, false)]
+    local procedure ShipmentHeaderEditOnBeforeSalesShptHeaderModify(var SalesShptHeader: Record "Sales Shipment Header"; FromSalesShptHeader: Record "Sales Shipment Header")
+    begin
+        SalesShptHeader."SBRHEL Deliver on Time or Delayed" := FromSalesShptHeader."SBRHEL Deliver on Time or Delayed";
+        SalesShptHeader."SBRHEL Reasoning for Delay" := FromSalesShptHeader."SBRHEL Reasoning for Delay";
+    end;
+    // HEL11.00 / 0005558 / SGR / 2020-04-28 END
+
     var
         skipFunc: Boolean;
+        // HEL11.00 / 0005558 / SGR / 2020-06-09 BEGIN
+        SBRCustManagementG: Codeunit "SBRCust Management";
+        // HEL11.00 / 0005558 / SGR / 2020-06-09 END
 }
