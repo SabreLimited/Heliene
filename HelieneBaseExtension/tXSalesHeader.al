@@ -108,6 +108,44 @@ tableextension 59116 SalesHeaderExt extends "Sales Header"
             Caption = 'Reasoning for Delay';            
         }
 
+        field(59165; "SBRHEL Linked Customer No."; Code[20])
+        {
+            Caption = 'Linked Customer No.';            
+            Editable = false;         
+        }
+        field(59166; "SBRHEL Linked Sales Order No."; Code[20])
+        {
+            Caption = 'Linked Sales Order No.';
+
+            trigger OnValidate();
+            var
+                SalesSetup: Record "Sales & Receivables Setup";
+                SalesHeader: Record "Sales Header";
+            begin                
+                if ("SBRHEL Linked Sales Order No." = '') and
+                    (xRec."SBRHEL Linked Sales Order No." <> "SBRHEL Linked Sales Order No." )
+                then begin  
+                    SalesSetup.Get;
+                    SalesSetup.TestField("SBRHEL US Company Name");
+                    SalesHeader.ChangeCompany(SalesSetup."SBRHEL US Company Name");
+                    if SalesHeader.Get(SalesHeader."Document Type"::Order,xRec."SBRHEL Linked Sales Order No.") then begin 
+                        SalesHeader."SBRHEL Linked Sales Order No." := '';
+                        SalesHeader."SBRHEL Linked Customer No." := '';
+                        SalesHeader."SBRHEL Linked Customer Name" := '';
+                        SalesHeader.Modify;
+
+                        "SBRHEL Linked Customer No." := '';
+                        "SBRHEL Linked Customer Name" := '';
+                    end;
+                end else
+                    Error('');
+            end;          
+        }
+        field(59167; "SBRHEL Linked Customer Name"; Text[50])
+        {
+            Caption = 'Linked Customer Name';            
+            Editable = false;         
+        }
         modify("Posting Date")
         {
             trigger OnAfterValidate()
